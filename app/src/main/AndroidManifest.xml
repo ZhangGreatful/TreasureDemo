@@ -15,6 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".users.login.LoginActivity">
+        </activity>
+        <activity android:name=".users.register.RegisterActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_Username"
+        style="@style/AppTheme.EditText.Big"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/et_Password"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginRight="54dp"
+        android:drawableLeft="@drawable/selector_ic_person"
+        android:hint="用户名"/>
+
+    <EditText
+        android:id="@+id/et_Password"
+        style="@style/AppTheme.EditText.Big"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/tv_forgetPassword"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginRight="54dp"
+        android:drawableLeft="@drawable/selector_ic_lock"
+        android:hint="请输入密码"
+        android:inputType="textPassword"/>
+
+    <TextView
+        android:id="@+id/tv_forgetPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_login"
+        android:layout_alignRight="@+id/btn_login"
+        android:layout_marginBottom="6dp"
+        android:text="忘记密码"
+        android:textColor="#c1a894"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="260dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:enabled="false"
+        android:text="登录"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/screen_bottom_line"/>
+</RelativeLayout>
