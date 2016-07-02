@@ -1,7 +1,6 @@
 package com.example.administrator.treasuredemo.users.login;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +23,8 @@ import butterknife.OnClick;
 
 /**
  * 登录界面
- *
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Bind(R.id.toolbar)
     Toolbar  toolBar;
@@ -83,10 +81,11 @@ public class LoginActivity extends AppCompatActivity {
             showPasswordError();
             return;
         }
+        new LoginPresenter(this).login();
 //         先做网络连接---------
 //        点击登录Button,进行跳转
 //        若用户名,密码判断成功,进行异步加载
-        new LoginTask().execute();
+//        new LoginTask().execute();
 
     }
 
@@ -126,35 +125,59 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
     private ProgressDialog progressDialog;
-//      此时,业务逻辑和UI视图是混在一起的
-    private final class LoginTask extends AsyncTask<String, String, String> {
-        //      异步加载之前
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            activityUtils.hideSoftKeyboard();//隐藏键盘
+
+    @Override
+    public void showProgress() {
+        activityUtils.hideSoftKeyboard();//隐藏键盘
 //            显示进度条
-            progressDialog = ProgressDialog.show(LoginActivity.this, "", "登录中,请稍后...");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-//                如果发现异常,显示一个Toast
-                activityUtils.showToast(e.getMessage());
-            }
-            return null;
-        }
-
-        //      当后台线程执行完,执行UI线程
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-//            执行完加载任务,隐藏任务条
-            progressDialog.dismiss();
-            activityUtils.startActivity(HomeActivity.class);//进行Activity的跳转
-        }
+        progressDialog = ProgressDialog.show(LoginActivity.this, "", "登录中,请稍后...");
     }
+
+    @Override
+    public void hideProgress() {
+        //            执行完加载任务,隐藏任务条
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        activityUtils.showToast(msg);
+    }
+
+    @Override
+    public void navigateHome() {
+        activityUtils.startActivity(HomeActivity.class);//进行Activity的跳转
+    }
+
+    //      此时,业务逻辑和UI视图是混在一起的
+//    private final class LoginTask extends AsyncTask<String, String, String> {
+//        //      异步加载之前
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            activityUtils.hideSoftKeyboard();//隐藏键盘
+////            显示进度条
+//            progressDialog = ProgressDialog.show(LoginActivity.this, "", "登录中,请稍后...");
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            try {
+//                Thread.sleep(4000);
+//            } catch (InterruptedException e) {
+////                如果发现异常,显示一个Toast
+//                activityUtils.showToast(e.getMessage());
+//            }
+//            return null;
+//        }
+//
+//        //      当后台线程执行完,执行UI线程
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+////            执行完加载任务,隐藏任务条
+//            progressDialog.dismiss();
+//            activityUtils.startActivity(HomeActivity.class);//进行Activity的跳转
+//        }
+//    }
 }

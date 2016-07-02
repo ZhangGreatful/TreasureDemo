@@ -1,7 +1,6 @@
 package com.example.administrator.treasuredemo.users.register;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +24,7 @@ import butterknife.OnClick;
 /**
  * 注册界面
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements RegisterView {
     @Bind(R.id.toolbar)
     Toolbar  toolBar;
     @Bind(R.id.et_Password)
@@ -70,7 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
             showPasswordError();
             return;
         }
-        new RegisterTask().execute();
+//        new RegisterTask().execute();
+        new RegisterPresenter(this).Register();
     }
 
     private void showPasswordError() {
@@ -118,32 +118,55 @@ public class RegisterActivity extends AppCompatActivity {
     };
     private ProgressDialog progressDialog;
 
-    private final class RegisterTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            隐藏软键盘
-            activityUtils.hideSoftKeyboard();
+    @Override
+    public void showProgress() {
+        //            隐藏软键盘
+        activityUtils.hideSoftKeyboard();
 //            显示进度条
-            progressDialog = ProgressDialog.show(RegisterActivity.this, "", "正在注册");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-//            执行完加载任务,进度条消失,
-            progressDialog.dismiss();
-            activityUtils.startActivity(HomeActivity.class);
-        }
+        progressDialog = ProgressDialog.show(RegisterActivity.this, "", "正在注册");
     }
+
+    @Override
+    public void hideProgress() {
+//            执行完加载任务,进度条消失,
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        activityUtils.showToast(msg);
+    }
+
+    @Override
+    public void nacigateHome() {
+        activityUtils.startActivity(HomeActivity.class);
+    }
+
+//    private final class RegisterTask extends AsyncTask<String, String, String> {
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+////            隐藏软键盘
+//            activityUtils.hideSoftKeyboard();
+////            显示进度条
+//            progressDialog = ProgressDialog.show(RegisterActivity.this, "", "正在注册");
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            activityUtils.startActivity(HomeActivity.class);
+//        }
+//    }
 }

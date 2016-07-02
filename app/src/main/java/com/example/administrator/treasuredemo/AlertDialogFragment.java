@@ -26,7 +26,7 @@ public class AlertDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        int title = getArguments().getInt(KEY_TITLE);
+        String title = getArguments().getString(KEY_TITLE);
         String msg = getArguments().getString(KEY_MESSAGE);
         return new AlertDialog.Builder(getActivity(), getTheme())
                 .setTitle(title)
