@@ -1,8 +1,9 @@
 package com.example.administrator.treasuredemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,7 @@ import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.users.login.LoginActivity;
 import com.example.administrator.treasuredemo.users.register.RegisterActivity;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -20,12 +21,13 @@ import butterknife.OnClick;
  * 使用ButterKnife关联id
  */
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
-    @BindView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.btn_register)
+    @Bind(R.id.btn_register)
     Button  btn_Register;
-    @BindView(R.id.btn_login)
+    @Bind(R.id.btn_login)
     Button  btn_Login;
     private ActivityUtils activityUtiles;
 
@@ -34,9 +36,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityUtiles = new ActivityUtils(this);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        activityUtiles = new ActivityUtils(this);
+
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        ButterKnife.bind(MainActivity.this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        设置ActionBart为ToolBar
         setSupportActionBar(toolbar);
@@ -58,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
+                Log.d(TAG, "onClick: LoginActivity");
                 activityUtiles.startActivity(LoginActivity.class);
                 break;
             case R.id.btn_register:
+                Log.d(TAG, "onClick: RegisterActivity");
                 activityUtiles.startActivity(RegisterActivity.class);
                 break;
         }

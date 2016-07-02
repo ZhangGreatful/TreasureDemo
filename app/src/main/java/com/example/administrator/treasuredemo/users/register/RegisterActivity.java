@@ -1,20 +1,20 @@
 package com.example.administrator.treasuredemo.users.register;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.administrator.treasuredemo.R;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * 注册界面
  */
 public class RegisterActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolBar;
 
     @Override
