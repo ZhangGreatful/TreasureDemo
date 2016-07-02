@@ -10,6 +10,9 @@ import com.example.administrator.treasuredemo.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 登录界面
+ */
 public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
