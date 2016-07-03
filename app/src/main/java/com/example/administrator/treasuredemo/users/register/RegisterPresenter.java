@@ -2,14 +2,20 @@ package com.example.administrator.treasuredemo.users.register;
 
 import android.os.AsyncTask;
 
+import com.example.administrator.treasuredemo.mvpbase.MvpBasePresenter;
+
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
-public class RegisterPresenter {
-    private RegisterView registerView;
+public class RegisterPresenter extends MvpBasePresenter<RegisterView> {
 
-    public RegisterPresenter(RegisterView registerView) {
-        this.registerView = registerView;
+    //    private RegisterView registerView;
+//
+//    public RegisterPresenter(RegisterView registerView) {
+//        this.registerView = registerView;
+//    }
+    public RegisterPresenter(RegisterView mvpBaseView) {
+        super(mvpBaseView);
     }
 
     public void Register() {
@@ -21,7 +27,7 @@ public class RegisterPresenter {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            registerView.showProgress();
+            getMvpBaseView().showProgress();
         }
 
         @Override
@@ -31,8 +37,8 @@ public class RegisterPresenter {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                registerView.hideProgress();
-                registerView.showMessage(e.getMessage());
+                getMvpBaseView().hideProgress();
+                getMvpBaseView().showMessage(e.getMessage());
             }
             return null;
         }
@@ -40,8 +46,8 @@ public class RegisterPresenter {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            registerView.hideProgress();
-            registerView.nacigateHome();
+            getMvpBaseView().hideProgress();
+            getMvpBaseView().nacigateHome();
         }
     }
 }

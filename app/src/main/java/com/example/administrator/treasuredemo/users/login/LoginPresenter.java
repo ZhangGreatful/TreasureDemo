@@ -2,15 +2,20 @@ package com.example.administrator.treasuredemo.users.login;
 
 import android.os.AsyncTask;
 
+import com.example.administrator.treasuredemo.mvpbase.MvpBasePresenter;
+
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
-public class LoginPresenter {
-    private LoginView loginView;
-
-    public LoginPresenter(LoginView loginView) {
-        this.loginView = loginView;
+public class LoginPresenter extends MvpBasePresenter<LoginView> {
+    public LoginPresenter(LoginView mvpBaseView) {
+        super(mvpBaseView);
     }
+//    private LoginView loginView;
+//
+//    public LoginPresenter(LoginView loginView) {
+//        this.loginView = loginView;
+//    }
 
     public void login() {
         new LoginTask().execute();
@@ -21,7 +26,7 @@ public class LoginPresenter {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loginView.showProgress();//显示进度条
+            getMvpBaseView().showProgress();//显示进度条
         }
 
         @Override
@@ -30,8 +35,8 @@ public class LoginPresenter {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                loginView.hideProgress();
-                loginView.showMessage(e.getMessage());
+                getMvpBaseView().hideProgress();
+                getMvpBaseView().showMessage(e.getMessage());
             }
             return null;
         }
@@ -39,8 +44,8 @@ public class LoginPresenter {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            loginView.hideProgress();//隐藏进度条
-            loginView.navigateHome();
+            getMvpBaseView().hideProgress();//隐藏进度条
+            getMvpBaseView().navigateHome();
 
         }
     }
