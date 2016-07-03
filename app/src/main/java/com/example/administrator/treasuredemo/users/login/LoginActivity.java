@@ -16,6 +16,7 @@ import com.example.administrator.treasuredemo.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
+import com.example.administrator.treasuredemo.users.Users;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
@@ -94,7 +95,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 //        若用户名,密码判断成功,进行异步加载
 //        new LoginTask().execute();
 
-        getPresenter().login();
+        getPresenter().login(new Users(username, password));
 
     }
 
