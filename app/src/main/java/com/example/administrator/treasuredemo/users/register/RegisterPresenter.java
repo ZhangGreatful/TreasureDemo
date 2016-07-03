@@ -2,21 +2,21 @@ package com.example.administrator.treasuredemo.users.register;
 
 import android.os.AsyncTask;
 
-import com.example.administrator.treasuredemo.mvpbase.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
-public class RegisterPresenter extends MvpBasePresenter<RegisterView> {
+public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
 
     //    private RegisterView registerView;
 //
 //    public RegisterPresenter(RegisterView registerView) {
 //        this.registerView = registerView;
 //    }
-    public RegisterPresenter(RegisterView mvpBaseView) {
-        super(mvpBaseView);
-    }
+//    public RegisterPresenter(RegisterView mvpBaseView) {
+//        super(mvpBaseView);
+//    }
 
     public void Register() {
         new RegisterTask().execute();
@@ -27,7 +27,7 @@ public class RegisterPresenter extends MvpBasePresenter<RegisterView> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            getMvpBaseView().showProgress();
+            getView().showProgress();
         }
 
         @Override
@@ -37,8 +37,8 @@ public class RegisterPresenter extends MvpBasePresenter<RegisterView> {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                getMvpBaseView().hideProgress();
-                getMvpBaseView().showMessage(e.getMessage());
+                getView().hideProgress();
+                getView().showMessage(e.getMessage());
             }
             return null;
         }
@@ -46,8 +46,8 @@ public class RegisterPresenter extends MvpBasePresenter<RegisterView> {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            getMvpBaseView().hideProgress();
-            getMvpBaseView().nacigateHome();
+            getView().hideProgress();
+            getView().nacigateHome();
         }
     }
 }

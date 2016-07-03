@@ -2,15 +2,15 @@ package com.example.administrator.treasuredemo.users.login;
 
 import android.os.AsyncTask;
 
-import com.example.administrator.treasuredemo.mvpbase.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
-public class LoginPresenter extends MvpBasePresenter<LoginView> {
-    public LoginPresenter(LoginView mvpBaseView) {
-        super(mvpBaseView);
-    }
+public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
+//    public LoginPresenter(LoginView mvpBaseView) {
+//        super(mvpBaseView);
+//    }
 //    private LoginView loginView;
 //
 //    public LoginPresenter(LoginView loginView) {
@@ -26,7 +26,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            getMvpBaseView().showProgress();//显示进度条
+            getView().showProgress();//显示进度条
         }
 
         @Override
@@ -35,8 +35,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                getMvpBaseView().hideProgress();
-                getMvpBaseView().showMessage(e.getMessage());
+                getView().hideProgress();
+                getView().showMessage(e.getMessage());
             }
             return null;
         }
@@ -44,8 +44,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            getMvpBaseView().hideProgress();//隐藏进度条
-            getMvpBaseView().navigateHome();
+            getView().hideProgress();//隐藏进度条
+            getView().navigateHome();
 
         }
     }

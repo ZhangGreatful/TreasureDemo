@@ -1,11 +1,11 @@
 package com.example.administrator.treasuredemo.users.login;
 
-import com.example.administrator.treasuredemo.mvpbase.MvpBaseView;
+import com.hannesdorfmann.mosby.mvp.MvpView;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
-public interface LoginView extends MvpBaseView {
+public interface LoginView extends MvpView {
     //      显示进度条
     void showProgress();
 

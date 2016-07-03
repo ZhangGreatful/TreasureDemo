@@ -2,7 +2,7 @@ package com.example.administrator.treasuredemo.users.login;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -16,6 +16,7 @@ import com.example.administrator.treasuredemo.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ import butterknife.OnClick;
 /**
  * 登录界面
  */
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
 
     @Bind(R.id.toolbar)
     Toolbar  toolBar;
@@ -59,6 +60,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         etUsername.addTextChangedListener(mTextWatcher);
     }
 
+    @NonNull
+    @Override
+    public LoginPresenter createPresenter() {
+        return new LoginPresenter();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -81,11 +88,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             showPasswordError();
             return;
         }
-        new LoginPresenter(this).login();
+//        new LoginPresenter(this).login();
 //         先做网络连接---------
 //        点击登录Button,进行跳转
 //        若用户名,密码判断成功,进行异步加载
 //        new LoginTask().execute();
+
+        getPresenter().login();
 
     }
 

@@ -2,7 +2,7 @@ package com.example.administrator.treasuredemo.users.register;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -16,6 +16,7 @@ import com.example.administrator.treasuredemo.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ import butterknife.OnClick;
 /**
  * 注册界面
  */
-public class RegisterActivity extends AppCompatActivity implements RegisterView {
+public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresenter> implements RegisterView {
     @Bind(R.id.toolbar)
     Toolbar  toolBar;
     @Bind(R.id.et_Password)
@@ -58,6 +59,12 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         etPassword.addTextChangedListener(mTextWatcher);
     }
 
+    @NonNull
+    @Override
+    public RegisterPresenter createPresenter() {
+        return new RegisterPresenter();
+    }
+
     @OnClick(R.id.btn_register)
     public void register() {
 //    正则进行判断用户名是否正确
@@ -70,7 +77,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
             return;
         }
 //        new RegisterTask().execute();
-        new RegisterPresenter(this).Register();
+//        new RegisterPresenter(this).Register();
+        getPresenter().Register();
     }
 
     private void showPasswordError() {
