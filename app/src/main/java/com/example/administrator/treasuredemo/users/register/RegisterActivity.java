@@ -16,6 +16,7 @@ import com.example.administrator.treasuredemo.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
+import com.example.administrator.treasuredemo.users.Users;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import butterknife.Bind;
@@ -78,7 +79,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
         }
 //        new RegisterTask().execute();
 //        new RegisterPresenter(this).Register();
-        getPresenter().Register();
+        getPresenter().register(new Users(username,password));
     }
 
     private void showPasswordError() {

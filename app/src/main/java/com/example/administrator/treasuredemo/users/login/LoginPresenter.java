@@ -1,108 +1,62 @@
 package com.example.administrator.treasuredemo.users.login;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.example.administrator.treasuredemo.commons.LogUtils;
 import com.example.administrator.treasuredemo.net.NetClient;
+import com.example.administrator.treasuredemo.users.UserApi;
 import com.example.administrator.treasuredemo.users.Users;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
 public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
-    private static final String TAG = "LoginPresenter";
-    private final String    URL       = "http://admin.syfeicuiedu.com/Handler/UserHandler.ashx?action=login";
-    private final MediaType mediaType = MediaType.parse("text/*");
-    private Gson gson;
 
-    public LoginPresenter() {
-        gson = new GsonBuilder().setLenient().create();//非严格模式
+    private Call<LoginResult> loginCall;
+
+
+    public void login(Users user) {
+        UserApi userApi = NetClient.getInstance().getUserApi();
+        if (loginCall != null) loginCall.cancel();
+        loginCall = userApi.login(user);
+        loginCall.enqueue(callback);
     }
 
-    public void login(Users users) {
-        new LoginTask().execute(users);
-    }
-
-    public final class LoginTask extends AsyncTask<Users, String, LoginResult> {
-
+    private Callback<LoginResult> callback = new Callback<LoginResult>() {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            getView().showProgress();//显示进度条
-        }
-
-        @Override
-        protected LoginResult doInBackground(Users... params) {
-            Users users = params[0];
-//            构建请求体
-            RequestBody requestBody = RequestBody.create(mediaType, gson.toJson(users));
-//            构建请求
-            Request request = new Request.Builder().url(URL)
-                    .post(requestBody)
-                    .build();
-            //     构建一次呼叫请求,得到当前这个呼叫(请求,响应)对象
-            Call call = NetClient.getInstance().getClient().newCall(request);
-            try {
-//                执行这次操作,得到响应
-                Response response = call.execute();
-//                对响应进行判断
-                if (response.isSuccessful()) {
-//                    从响应中取出响应体
-                    ResponseBody responseBody = response.body();
-                    String body = responseBody.string();
-                    LogUtils.d("-------------body :" + body);
-//                    将字符串body-->LoginResult实体对象
-                    LoginResult loginResult = gson.fromJson(body, LoginResult.class);
-                    return loginResult;
+        public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+            getView().hideProgress();
+//            是否成功
+            if (response.isSuccessful()) {
+//                取出响应体(retrofit已加gson转化器,注意接口的定义)
+                LoginResult result = response.body();
+                if (result == null) {
+                    getView().showMessage("unknow error");
+                    return;
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                publishProgress(e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            Log.d(TAG, "onProgressUpdate: --------");
-            getView().hideProgress();
-            getView().showMessage(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(LoginResult result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "onPostExecute: -----------");
-            getView().hideProgress();
-            if (result != null) {
+//                显示返回信息
+                getView().showMessage(result.getMsg());
+//                登录成功
                 if (result.getCode() == 1) {
                     getView().navigateHome();
-                } else if (result.getCode() == 2) {
-                    getView().showMessage("此用户已被锁住!无法正常登录");
-                } else if (result.getCode() == 3) {
-                    getView().showMessage("用户名不存在!请先注册成会员再登录");
-                } else if (result.getCode() == 4) {
-                    getView().showMessage("密码错误！");
-                } else if (result.getCode() == 5) {
-                    getView().showMessage("此用户已登录");
                 }
+                return;
             }
-
+            getView().showMessage("网络连接异常");
         }
+
+        @Override
+        public void onFailure(Call<LoginResult> call, Throwable t) {
+            getView().hideProgress();
+            getView().showMessage(t.getMessage());
+        }
+    };
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if (!retainInstance && loginCall != null) loginCall.cancel();
     }
 }

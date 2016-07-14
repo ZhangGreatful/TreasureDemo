@@ -1,53 +1,56 @@
 package com.example.administrator.treasuredemo.users.register;
 
-import android.os.AsyncTask;
-
+import com.example.administrator.treasuredemo.net.NetClient;
+import com.example.administrator.treasuredemo.users.UserApi;
+import com.example.administrator.treasuredemo.users.Users;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
  */
 public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> {
 
-    //    private RegisterView registerView;
-//
-//    public RegisterPresenter(RegisterView registerView) {
-//        this.registerView = registerView;
-//    }
-//    public RegisterPresenter(RegisterView mvpBaseView) {
-//        super(mvpBaseView);
-//    }
+    private Call<RegisterResult> registerCall;
 
-    public void Register() {
-        new RegisterTask().execute();
+    public void register(Users user) {
+        UserApi userApi = NetClient.getInstance().getUserApi();
+        if (registerCall != null) registerCall.cancel();
+        registerCall = userApi.register(user);
+        registerCall.enqueue(callback);
     }
 
-    public final class RegisterTask extends AsyncTask<String, String, String> {
-
+    private Callback<RegisterResult> callback = new Callback<RegisterResult>() {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            getView().showProgress();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                getView().hideProgress();
-                getView().showMessage(e.getMessage());
+        public void onResponse(Call<RegisterResult> call, Response<RegisterResult> response) {
+            if (response.isSuccessful()) {
+                RegisterResult result = response.body();
+                if (result == null) {
+                    getView().showMessage("unknow error");
+                    return;
+                }
+                getView().showMessage(result.getMsg());
+                if (result.getCode() == 1) {
+                    getView().nacigateHome();
+                }
+                return;
             }
-            return null;
+            getView().showMessage("网络连接异常");
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        public void onFailure(Call<RegisterResult> call, Throwable t) {
             getView().hideProgress();
-            getView().nacigateHome();
+            getView().showMessage(t.getMessage());
         }
+    };
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if (registerCall != null) registerCall.cancel();
     }
 }
