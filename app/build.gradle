@@ -31,4 +31,11 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.0-RC1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.android.support:design:23.2.1'
+    // circularimageview: 圆形的ImageView
+    compile 'com.pkmmte.view:circularimageview:1.1'
+    // CardView
+    compile 'com.android.support:cardview-v7:23.2.1'
+//    图片剪切
+    compile 'org.hybridsquad.android.photocropper:library:2.1.0'
 }

@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.administrator.treasuredemo.AlertDialogFragment;
-import com.example.administrator.treasuredemo.HomeActivity;
+import com.example.administrator.treasuredemo.components.AlertDialogFragment;
+import com.example.administrator.treasuredemo.home.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
@@ -35,8 +35,8 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
     EditText etUsername;
     @Bind(R.id.et_Confirm)
     EditText etConfirm;
-    @Bind(R.id.btn_register)
-    Button   btn_register;
+    @Bind(R.id.btn_Register)
+    Button   btn_Register;
 
     private String        password;
     private String        username;
@@ -45,19 +45,23 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityUtils = new ActivityUtils(this);
         setContentView(R.layout.activity_register);
     }
 
     @Override
     public void onContentChanged() {
-        ButterKnife.bind(this);
+        super.onContentChanged();
+        ButterKnife.bind(RegisterActivity.this);
         setSupportActionBar(toolBar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getTitle());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(getTitle());
+        }
 
-        activityUtils = new ActivityUtils(this);
-        etUsername.addTextChangedListener(mTextWatcher);
-        etPassword.addTextChangedListener(mTextWatcher);
+        etConfirm.addTextChangedListener(mTextWatcher);//EditText设置监听
+        etUsername.addTextChangedListener(mTextWatcher);//EditText设置监听
+        etPassword.addTextChangedListener(mTextWatcher);//EditText设置监听
     }
 
     @NonNull
@@ -66,7 +70,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
         return new RegisterPresenter();
     }
 
-    @OnClick(R.id.btn_register)
+    @OnClick(R.id.btn_Register)
     public void register() {
 //    正则进行判断用户名是否正确
         if (RegexUtils.verifyUsername(username) != RegexUtils.VERIFY_SUCCESS) {
@@ -77,9 +81,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
             showPasswordError();
             return;
         }
-//        new RegisterTask().execute();
-//        new RegisterPresenter(this).Register();
-        getPresenter().register(new Users(username,password));
+        getPresenter().register(new Users(username, password));
     }
 
     private void showPasswordError() {
@@ -121,7 +123,7 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
             password = etPassword.getText().toString();
             boolean canRegister = TextUtils.isEmpty(username) || TextUtils.isEmpty(password);
             if (!canRegister) {
-                btn_register.setEnabled(true);
+                btn_Register.setEnabled(true);
             }
         }
     };
@@ -147,35 +149,15 @@ public class RegisterActivity extends MvpActivity<RegisterView, RegisterPresente
     }
 
     @Override
-    public void nacigateHome() {
+    public void navigateToHome() {
         activityUtils.startActivity(HomeActivity.class);
+        finish();
     }
 
-//    private final class RegisterTask extends AsyncTask<String, String, String> {
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-////            隐藏软键盘
-//            activityUtils.hideSoftKeyboard();
-////            显示进度条
-//            progressDialog = ProgressDialog.show(RegisterActivity.this, "", "正在注册");
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            try {
-//                Thread.sleep(3000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//
-//            activityUtils.startActivity(HomeActivity.class);
-//        }
-//    }
+    @Override
+    public void clearEditView() {
+        etPassword.setText("");
+    }
+
+
 }

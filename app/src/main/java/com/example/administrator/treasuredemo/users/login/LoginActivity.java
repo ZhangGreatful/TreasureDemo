@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.administrator.treasuredemo.AlertDialogFragment;
-import com.example.administrator.treasuredemo.HomeActivity;
+import com.example.administrator.treasuredemo.components.AlertDialogFragment;
+import com.example.administrator.treasuredemo.home.HomeActivity;
 import com.example.administrator.treasuredemo.R;
 import com.example.administrator.treasuredemo.commons.ActivityUtils;
 import com.example.administrator.treasuredemo.commons.RegexUtils;
@@ -34,7 +34,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     EditText etPassword;
     @Bind(R.id.et_Username)
     EditText etUsername;
-    @Bind(R.id.btn_login)
+    @Bind(R.id.btn_Login)
     Button   btnLogin;
 
     private ActivityUtils activityUtils;
@@ -77,7 +77,29 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.btn_login)
+    private final TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            username = etUsername.getText().toString();
+            password = etPassword.getText().toString();
+            boolean canLogin = TextUtils.isEmpty(username) || TextUtils.isEmpty(password);
+            if (!canLogin) {
+                btnLogin.setEnabled(true);
+            }
+        }
+    };
+
+    @OnClick(R.id.btn_Login)
     public void login() {
 //        正则进行判断输入的用户名是否有效
         if (RegexUtils.verifyUsername(username) != RegexUtils.VERIFY_SUCCESS) {
@@ -113,27 +135,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
 
     //
-    private final TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            username = etUsername.getText().toString();
-            password = etPassword.getText().toString();
-            boolean canLogin = TextUtils.isEmpty(username) || TextUtils.isEmpty(password);
-            if (!canLogin) {
-                btnLogin.setEnabled(true);
-            }
-        }
-    };
     private ProgressDialog progressDialog;
 
     @Override
@@ -146,7 +148,10 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @Override
     public void hideProgress() {
         //            执行完加载任务,隐藏任务条
-        progressDialog.dismiss();
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+        }
+
     }
 
     @Override
@@ -155,39 +160,14 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void navigateHome() {
+    public void navigateToHome() {
         activityUtils.startActivity(HomeActivity.class);//进行Activity的跳转
+        finish();
     }
 
-    //      此时,业务逻辑和UI视图是混在一起的
-//    private final class LoginTask extends AsyncTask<String, String, String> {
-//        //      异步加载之前
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            activityUtils.hideSoftKeyboard();//隐藏键盘
-////            显示进度条
-//            progressDialog = ProgressDialog.show(LoginActivity.this, "", "登录中,请稍后...");
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            try {
-//                Thread.sleep(4000);
-//            } catch (InterruptedException e) {
-////                如果发现异常,显示一个Toast
-//                activityUtils.showToast(e.getMessage());
-//            }
-//            return null;
-//        }
-//
-//        //      当后台线程执行完,执行UI线程
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-////            执行完加载任务,隐藏任务条
-//            progressDialog.dismiss();
-//            activityUtils.startActivity(HomeActivity.class);//进行Activity的跳转
-//        }
-//    }
+    @Override
+    public void clearEditView() {
+        etPassword.setText("");
+    }
+
 }

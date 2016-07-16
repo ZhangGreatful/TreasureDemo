@@ -40,7 +40,8 @@ public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
                 getView().showMessage(result.getMsg());
 //                登录成功
                 if (result.getCode() == 1) {
-                    getView().navigateHome();
+                    getView().navigateToHome();
+
                 }
                 return;
             }

@@ -16,5 +16,7 @@ public interface RegisterView extends MvpView {
     void showMessage(String msg);
 
     //    跳转到HomeActivity
-    void nacigateHome();
+    void navigateToHome();
+//      清理
+    void clearEditView();
 }

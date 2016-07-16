@@ -34,7 +34,7 @@ public class RegisterPresenter extends MvpNullObjectBasePresenter<RegisterView> 
                 }
                 getView().showMessage(result.getMsg());
                 if (result.getCode() == 1) {
-                    getView().nacigateHome();
+                    getView().navigateToHome();
                 }
                 return;
             }

@@ -1,4 +1,4 @@
-package com.example.administrator.treasuredemo;
+package com.example.administrator.treasuredemo.components;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+
+import com.example.administrator.treasuredemo.R;
 
 /**
  * Created by Administrator on 2016/7/2 0002.
